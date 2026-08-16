@@ -1,4 +1,5 @@
 #include "DualMouseMessageHandler.h"
+#include "Windows/WindowsHWrapper.h"
 
 #if PLATFORM_WINDOWS
 
@@ -18,6 +19,11 @@ bool FDualMouseMessageHandler::ProcessMessage(
 	int32& OutResult
 )
 {
+	if (Msg == WM_INPUT)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("WM_INPUT received"));
+	}
+
 	return false;
 }
 

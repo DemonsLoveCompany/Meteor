@@ -10,7 +10,7 @@ class FDualMouseMessageHandler : public IWindowsMessageHandler
 {
 public:
 	FDualMouseMessageHandler();
-	~FDualMouseMessageHandler();
+	virtual ~FDualMouseMessageHandler();
 
 	virtual bool ProcessMessage(
 		HWND Hwnd,
