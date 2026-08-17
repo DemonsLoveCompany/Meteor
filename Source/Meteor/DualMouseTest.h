@@ -23,4 +23,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, Category = "Dual Mouse Test")
+	AActor* RazerTargetActor = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Dual Mouse Test")
+	AActor* SteelSeriesTargetActor = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = "Dual Mouse Test")
+	float MouseSensitivity = 0.25f;
+
 };
