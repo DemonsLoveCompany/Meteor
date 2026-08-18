@@ -33,7 +33,7 @@ void FMeteorModule::StartupModule()
 #endif
 }
 
-void FMeteorModule::ConsumeRazerDelta(
+void FMeteorModule::ConsumeMouse0Delta(
 	int32& OutX,
 	int32& OutY
 )
@@ -44,7 +44,7 @@ void FMeteorModule::ConsumeRazerDelta(
 #if PLATFORM_WINDOWS
 	if (DualMouseMessageHandler.IsValid())
 	{
-		DualMouseMessageHandler->ConsumeRazerDelta(
+		DualMouseMessageHandler->ConsumeMouse0Delta(
 			OutX,
 			OutY
 		);
@@ -52,7 +52,7 @@ void FMeteorModule::ConsumeRazerDelta(
 #endif
 }
 
-void FMeteorModule::ConsumeSteelSeriesDelta(
+void FMeteorModule::ConsumeMouse1Delta(
 	int32& OutX,
 	int32& OutY
 )
@@ -63,7 +63,7 @@ void FMeteorModule::ConsumeSteelSeriesDelta(
 #if PLATFORM_WINDOWS
 	if (DualMouseMessageHandler.IsValid())
 	{
-		DualMouseMessageHandler->ConsumeSteelSeriesDelta(
+		DualMouseMessageHandler->ConsumeMouse1Delta(
 			OutX,
 			OutY
 		);

@@ -35,8 +35,8 @@ void ADualMouseTest::Tick(float DeltaTime)
 	int32 SteelSeriesX = 0;
 	int32 SteelSeriesY = 0;
 
-	MeteorModule.ConsumeRazerDelta(RazerX, RazerY);
-	MeteorModule.ConsumeSteelSeriesDelta(SteelSeriesX, SteelSeriesY);
+	MeteorModule.ConsumeMouse0Delta(RazerX, RazerY);
+	MeteorModule.ConsumeMouse1Delta(SteelSeriesX, SteelSeriesY);
 
 	if (RazerTargetActor && (RazerX != 0 || RazerY != 0))
 	{

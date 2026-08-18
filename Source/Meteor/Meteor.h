@@ -11,8 +11,8 @@ public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 
-	void ConsumeRazerDelta(int32& OutX, int32& OutY);
-	void ConsumeSteelSeriesDelta(int32& OutX, int32& OutY);
+	void ConsumeMouse0Delta(int32& OutX, int32& OutY);
+	void ConsumeMouse1Delta(int32& OutX, int32& OutY);
 
 private:
 	TSharedPtr<FDualMouseMessageHandler> DualMouseMessageHandler;

@@ -1,7 +1,7 @@
 #include "DualMouseMessageHandler.h"
 #include "Windows/WindowsHWrapper.h"
 
-void FDualMouseMessageHandler::ConsumeRazerDelta(
+void FDualMouseMessageHandler::ConsumeMouse0Delta(
 	int32& OutX,
 	int32& OutY
 )
@@ -13,7 +13,7 @@ void FDualMouseMessageHandler::ConsumeRazerDelta(
 	RazerDeltaY = 0;
 }
 
-void FDualMouseMessageHandler::ConsumeSteelSeriesDelta(
+void FDualMouseMessageHandler::ConsumeMouse1Delta(
 	int32& OutX,
 	int32& OutY
 )
@@ -23,6 +23,40 @@ void FDualMouseMessageHandler::ConsumeSteelSeriesDelta(
 
 	SteelSeriesDeltaX = 0;
 	SteelSeriesDeltaY = 0;
+}
+
+FString FDualMouseMessageHandler::GetDeviceName(HANDLE DeviceHandle) const
+{
+	UINT NameSize = 0;
+
+	GetRawInputDeviceInfo(
+		DeviceHandle,
+		RIDI_DEVICENAME,
+		nullptr,
+		&NameSize
+	);
+
+	if (NameSize == 0)
+	{
+		return FString();
+	}
+
+	TArray<TCHAR> DeviceNameBuffer;
+	DeviceNameBuffer.SetNumZeroed(NameSize + 1);
+
+	UINT Result = GetRawInputDeviceInfo(
+		DeviceHandle,
+		RIDI_DEVICENAME,
+		DeviceNameBuffer.GetData(),
+		&NameSize
+	);
+
+	if (Result == static_cast<UINT>(-1))
+	{
+		return FString();
+	}
+
+	return FString(DeviceNameBuffer.GetData());
 }
 
 #if PLATFORM_WINDOWS
@@ -76,23 +110,60 @@ bool FDualMouseMessageHandler::ProcessMessage(
 
 				if (RawInput->header.dwType == RIM_TYPEMOUSE)
 				{
+					const FString DeviceName =
+						GetDeviceName(RawInput->header.hDevice);
 
-					const HANDLE RazerHandle = reinterpret_cast<HANDLE>(0x1003F);
-					const HANDLE SteelSeriesHandle = reinterpret_cast<HANDLE>(0x10039); //Hard-coding mouse
+					const int32 DeltaX = RawInput->data.mouse.lLastX;
+					const int32 DeltaY = RawInput->data.mouse.lLastY;
 
-					if (RawInput->header.dwType == RIM_TYPEMOUSE)
+					if (
+						DeviceName.Contains(TEXT("VID_1532")) &&
+						DeviceName.Contains(TEXT("PID_006A"))
+						)
 					{
-						if (RawInput->header.hDevice == RazerHandle)
-						{
-							RazerDeltaX += RawInput->data.mouse.lLastX;
-							RazerDeltaY += RawInput->data.mouse.lLastY;
-						}
-						else if (RawInput->header.hDevice == SteelSeriesHandle)
-						{
-							SteelSeriesDeltaX += RawInput->data.mouse.lLastX;
-							SteelSeriesDeltaY += RawInput->data.mouse.lLastY;
-						}
+						RazerDeltaX += DeltaX;
+						RazerDeltaY += DeltaY;
 					}
+					else if (
+						DeviceName.Contains(TEXT("VID_1038")) &&
+						DeviceName.Contains(TEXT("PID_1724"))
+						)
+					{
+						SteelSeriesDeltaX += DeltaX;
+						SteelSeriesDeltaY += DeltaY;
+					}
+
+
+					//const HANDLE RazerHandle = reinterpret_cast<HANDLE>(0x1003F);
+					//const HANDLE SteelSeriesHandle = reinterpret_cast<HANDLE>(0x10039); //Hard-coding mouse
+
+					//if (RawInput->header.dwType == RIM_TYPEMOUSE)
+					//{
+					//	if (RawInput->header.hDevice == RazerHandle)
+					//	{
+					//		RazerDeltaX += RawInput->data.mouse.lLastX;
+					//		RazerDeltaY += RawInput->data.mouse.lLastY;
+					//	}
+					//	else if (RawInput->header.hDevice == SteelSeriesHandle)
+					//	{
+					//		SteelSeriesDeltaX += RawInput->data.mouse.lLastX;
+					//		SteelSeriesDeltaY += RawInput->data.mouse.lLastY;
+					//	}
+					//}
+
+					//Noisy device name print
+					
+					
+					//const FString DeviceName =
+					//	GetDeviceName(RawInput->header.hDevice);
+
+					//UE_LOG(
+					//	LogTemp,
+					//	Warning,
+					//	TEXT("Mouse Device=%p Name=%s"),
+					//	RawInput->header.hDevice,
+					//	*DeviceName
+					//);
 
 				}
 			}

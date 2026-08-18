@@ -20,10 +20,12 @@ public:
 		int32& OutResult
 	) override;
 
-	void ConsumeRazerDelta(int32& OutX, int32& OutY);
-	void ConsumeSteelSeriesDelta(int32& OutX, int32& OutY);
+	void ConsumeMouse0Delta(int32& OutX, int32& OutY);
+	void ConsumeMouse1Delta(int32& OutX, int32& OutY);
 
 private:
+	FString GetDeviceName(HANDLE DeviceHandle) const;
+
 	int32 RazerDeltaX = 0;
 	int32 RazerDeltaY = 0;
 
