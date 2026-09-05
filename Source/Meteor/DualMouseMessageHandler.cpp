@@ -125,8 +125,8 @@ bool FDualMouseMessageHandler::ProcessMessage(
 						RazerDeltaY += DeltaY;
 					}
 					else if (
-						DeviceName.Contains(TEXT("VID_1038")) &&
-						DeviceName.Contains(TEXT("PID_1724"))
+						DeviceName.Contains(TEXT("VID_3233")) &&
+						DeviceName.Contains(TEXT("PID_0009"))
 						)
 					{
 						SteelSeriesDeltaX += DeltaX;
