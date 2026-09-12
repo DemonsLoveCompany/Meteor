@@ -117,18 +117,21 @@ bool FDualMouseMessageHandler::ProcessMessage(
 					const int32 DeltaY = RawInput->data.mouse.lLastY;
 
 					if (
+						//Razer Wireless Mouse
 						DeviceName.Contains(TEXT("VID_1532")) &&
-						DeviceName.Contains(TEXT("PID_006A"))
+						DeviceName.Contains(TEXT("PID_00BF"))
 						)
 					{
 						RazerDeltaX += DeltaX;
 						RazerDeltaY += DeltaY;
 					}
 					else if (
+						//Ducky Frozen Feather Mouse
 						DeviceName.Contains(TEXT("VID_3233")) &&
 						DeviceName.Contains(TEXT("PID_0009"))
 						)
 					{
+						
 						SteelSeriesDeltaX += DeltaX;
 						SteelSeriesDeltaY += DeltaY;
 					}
