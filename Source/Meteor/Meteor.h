@@ -14,6 +14,9 @@ public:
 	void ConsumeMouse0Delta(int32& OutX, int32& OutY);
 	void ConsumeMouse1Delta(int32& OutX, int32& OutY);
 
+	bool IsMouse0FireHeld();
+	bool IsMouse1FireHeld();
+
 private:
 	TSharedPtr<FDualMouseMessageHandler> DualMouseMessageHandler;
 };

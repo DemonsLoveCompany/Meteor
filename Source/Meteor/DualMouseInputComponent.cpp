@@ -41,6 +41,22 @@ void UDualMouseInputComponent::GetMouse1Delta(int32& X, int32& Y)
 	MeteorModule.ConsumeMouse1Delta(X, Y);
 }
 
+bool UDualMouseInputComponent::IsMouse0FireHeld()
+{
+	FMeteorModule& MeteorModule =
+		FModuleManager::LoadModuleChecked<FMeteorModule>("Meteor");
+
+	return MeteorModule.IsMouse0FireHeld();
+}
+
+bool UDualMouseInputComponent::IsMouse1FireHeld()
+{
+	FMeteorModule& MeteorModule =
+		FModuleManager::LoadModuleChecked<FMeteorModule>("Meteor");
+
+	return MeteorModule.IsMouse1FireHeld();
+}
+
 
 // Called every frame
 void UDualMouseInputComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)

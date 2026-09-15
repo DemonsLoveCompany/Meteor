@@ -1,7 +1,5 @@
 #pragma once
 
-#pragma once
-
 #if PLATFORM_WINDOWS
 
 #include "Windows/WindowsApplication.h"
@@ -23,16 +21,20 @@ public:
 	void ConsumeMouse0Delta(int32& OutX, int32& OutY);
 	void ConsumeMouse1Delta(int32& OutX, int32& OutY);
 
+	bool IsLeftMouseFireHeld() const;
+	bool IsRightMouseFireHeld() const;
+
 private:
 	FString GetDeviceName(HANDLE DeviceHandle) const;
 
-	int32 RazerDeltaX = 0;
-	int32 RazerDeltaY = 0;
+	int32 RightMouseX = 0;
+	int32 RightMouseY = 0;
 
-	int32 SteelSeriesDeltaX = 0;
-	int32 SteelSeriesDeltaY = 0;
+	int32 LeftMouseX = 0;
+	int32 LeftMouseY = 0;
+
+	bool bLeftMouseFireHeld = false;
+	bool bRightMouseFireHeld = false;
 };
-
-
 
 #endif

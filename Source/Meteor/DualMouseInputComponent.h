@@ -22,6 +22,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Dual Mouse Input")
 	void GetMouse1Delta(int32& X, int32& Y);
 
+	UFUNCTION(BlueprintPure, Category = "Dual Mouse Input")
+	bool IsMouse0FireHeld();
+
+	UFUNCTION(BlueprintPure, Category = "Dual Mouse Input")
+	bool IsMouse1FireHeld();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

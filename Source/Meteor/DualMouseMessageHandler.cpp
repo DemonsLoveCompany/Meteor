@@ -6,11 +6,11 @@ void FDualMouseMessageHandler::ConsumeMouse0Delta(
 	int32& OutY
 )
 {
-	OutX = RazerDeltaX;
-	OutY = RazerDeltaY;
+	OutX = LeftMouseX;
+	OutY = LeftMouseY;
 
-	RazerDeltaX = 0;
-	RazerDeltaY = 0;
+	LeftMouseX = 0;
+	LeftMouseY = 0;
 }
 
 void FDualMouseMessageHandler::ConsumeMouse1Delta(
@@ -18,11 +18,21 @@ void FDualMouseMessageHandler::ConsumeMouse1Delta(
 	int32& OutY
 )
 {
-	OutX = SteelSeriesDeltaX;
-	OutY = SteelSeriesDeltaY;
+	OutX = RightMouseX;
+	OutY = RightMouseY;
 
-	SteelSeriesDeltaX = 0;
-	SteelSeriesDeltaY = 0;
+	RightMouseX = 0;
+	RightMouseY = 0;
+}
+
+bool FDualMouseMessageHandler::IsLeftMouseFireHeld() const
+{
+	return bLeftMouseFireHeld;
+}
+
+bool FDualMouseMessageHandler::IsRightMouseFireHeld() const
+{
+	return bRightMouseFireHeld;
 }
 
 FString FDualMouseMessageHandler::GetDeviceName(HANDLE DeviceHandle) const
@@ -113,8 +123,21 @@ bool FDualMouseMessageHandler::ProcessMessage(
 					const FString DeviceName =
 						GetDeviceName(RawInput->header.hDevice);
 
+					//temporary debugging
+					if (DeviceName.Contains(TEXT("VID_1532")))
+					{
+						UE_LOG(
+							LogTemp,
+							Warning,
+							TEXT("RAZER RAW INPUT DEVICE: %s"),
+							*DeviceName
+						);
+					}
+
 					const int32 DeltaX = RawInput->data.mouse.lLastX;
 					const int32 DeltaY = RawInput->data.mouse.lLastY;
+
+					const USHORT ButtonFlags = RawInput->data.mouse.usButtonFlags;
 
 					if (
 						//Ducky Frozen Feather Mouse ~ Left Reticule
@@ -122,21 +145,49 @@ bool FDualMouseMessageHandler::ProcessMessage(
 						DeviceName.Contains(TEXT("PID_0009"))
 						)
 					{
-						RazerDeltaX += DeltaX;
-						RazerDeltaY += DeltaY;
+						LeftMouseX += DeltaX;
+						LeftMouseY += DeltaY;
+
+						if (ButtonFlags & RI_MOUSE_RIGHT_BUTTON_DOWN)
+						{
+							bLeftMouseFireHeld = true;
+						}
+
+						if (ButtonFlags & RI_MOUSE_RIGHT_BUTTON_UP)
+						{
+							bLeftMouseFireHeld = false;
+						}
 					}
 					else if (
 						//Razer Wireless Mouse ~ Right Reticule
 						DeviceName.Contains(TEXT("VID_1532")) &&
-						DeviceName.Contains(TEXT("PID_00BF"))
+						DeviceName.Contains(TEXT("PID_00BE"))
 						)
 					{
 						
-						SteelSeriesDeltaX += DeltaX;
-						SteelSeriesDeltaY += DeltaY;
+						RightMouseX += DeltaX;
+						RightMouseY += DeltaY;
+
+						if (ButtonFlags & RI_MOUSE_LEFT_BUTTON_DOWN)
+						{
+							bRightMouseFireHeld = true;
+						}
+
+						if (ButtonFlags & RI_MOUSE_LEFT_BUTTON_UP)
+						{
+							bRightMouseFireHeld = false;
+						}
 					}
 
 
+
+
+
+
+
+
+
+					//OLD MOUSE CONSOLE LOGGING CODE
 					//const HANDLE RazerHandle = reinterpret_cast<HANDLE>(0x1003F);
 					//const HANDLE SteelSeriesHandle = reinterpret_cast<HANDLE>(0x10039); //Hard-coding mouse
 

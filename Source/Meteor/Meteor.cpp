@@ -71,6 +71,30 @@ void FMeteorModule::ConsumeMouse1Delta(
 #endif
 }
 
+bool FMeteorModule::IsMouse0FireHeld()
+{
+#if PLATFORM_WINDOWS
+	if (DualMouseMessageHandler.IsValid())
+	{
+		return DualMouseMessageHandler->IsLeftMouseFireHeld();
+	}
+#endif
+
+	return false;
+}
+
+bool FMeteorModule::IsMouse1FireHeld()
+{
+#if PLATFORM_WINDOWS
+	if (DualMouseMessageHandler.IsValid())
+	{
+		return DualMouseMessageHandler->IsRightMouseFireHeld();
+	}
+#endif
+
+	return false;
+}
+
 void FMeteorModule::ShutdownModule()
 {
 #if PLATFORM_WINDOWS
